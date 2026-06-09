@@ -43,4 +43,11 @@
 (def extratos (atom ()))
 
 
-(defn)
+(defn exibe-usuario [mapa]
+  (let [{nome :nome idade :idade} mapa]
+    (str nome " tem " idade " anos."))
+    
+    )
+
+    (defn alimento [extratos]
+    (let [{alimento :nome idade :idade} extratos ]))
