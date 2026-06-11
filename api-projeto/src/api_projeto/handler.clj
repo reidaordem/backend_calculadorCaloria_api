@@ -79,21 +79,21 @@
     (* caloria-por-minuto quantidade)))
 
 
-  (defn obter-calorias-por-nome [api-key nome-alimento]
+  (defn buscar-caloria-por-nome [api-key nome-alimento]
   (let [url "https://usda.gov"
-        ;; Faz a busca enviando a chave e o nome do alimento como parâmetros
+        ;; 1. Faz a busca pelo nome do alimento
         resposta (client/get url {:query-params {"api_key" api-key
                                                  "query" nome-alimento}
                                   :as :json})
-        ;; Pega o primeiro alimento da lista de resultados
+        
+        ;; 2. Pega o primeiro alimento do resultado
         primeiro-alimento (first (get-in resposta [:body :foods]))
+        
+        ;; 3. Pega a lista de nutrientes desse alimento
         nutrientes (:foodNutrients primeiro-alimento)]
     
-    ;; Filtra os nutrientes do alimento para achar a caloria (ID 208 ou "Energy")
-    (-> (filter (fn [n] 
-                  (or (= (:nutrientId n) 208)
-                      (= (:nutrientName n) "Energy"))) 
-                nutrientes)
+    ;; 4. Filtra a lista para achar o valor onde o nutrientName é "Energy"
+    (-> (filter #(= (:nutrientName %) "Energy") nutrientes)
         first
         :value)))
 
